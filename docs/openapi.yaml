@@ -1,0 +1,74 @@
+openapi: 3.0.1
+info:
+  title: SaaS Processing API
+  version: '1.0'
+  description: >
+    API ядра SaaS-процессинговой платформы.
+    Заглушка для Swagger UI. Содержит основные разделы платформы: core, payouts, merchant и др.
+servers:
+  - url: http://localhost:8000/
+paths:
+  /core/bin-analyze:
+    get:
+      summary: BIN-анализ карты
+      parameters:
+        - name: bin_number
+          in: query
+          schema: {type: string}
+          required: true
+      responses:
+        '200':
+          description: Результат анализа
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { bin: '123456', issuer: 'stub bank', country: 'RU', antifraud_status: 'OK'}
+  /payouts/:
+    post:
+      summary: Запуск выплаты
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { amount: 1000, currency: 'RUB', dst: 'card' }
+      responses:
+        '200':
+          description: Старт выплаты
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { payout_id: 123, status: 'initiated' }
+  /merchant/profile:
+    get:
+      summary: Профиль мерчанта
+      responses:
+        '200':
+          description: Данные каб.мерчанта
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { merchant_id: 'demo', balance: 10000.0, api_key: 'abc123' }
+  /notifications/send:
+    post:
+      summary: Отправка уведомления
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { channel: "email", message: "Оплата успешна", recipient: "user@email" }
+      responses:
+        '200':
+          description: Результат отправки
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { sent: true, via: "email", to: "user@email" }
+
